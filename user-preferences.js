@@ -23,11 +23,6 @@ if (preferencesForm) {
 
     updateBackgroundColor(bgColorValue);
     greetUser(userNameValue);
-    console.log(userNameValue);
-    console.log(bgColorValue);
-
-    // document.querySelector('#preferences').appendChild();
-
   }
 
   function updateBackgroundColor(color) {
@@ -45,16 +40,3 @@ if (preferencesForm) {
     }
   }
 }
-
-
-// window.addEventListener('storage', function(event) {
-//
-// });
-
-// function updatePage2(newValue) {
-//   let updatedValueElement = document.querySelector('#updatedValue');
-//
-//   if (updatedValue) {
-//     updatedValueElement.innerHTML = newValue;
-//   }
-// }

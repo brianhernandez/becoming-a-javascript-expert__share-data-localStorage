@@ -7,7 +7,6 @@ if (formElement) {
 
   function addOrUpdateLocalStorage(event) {
     let inputTextValue = document.querySelector('input[type="text"]').value;
-    console.log(inputTextValue);
     localStorage.setItem('data', inputTextValue);
     event.preventDefault();
   }
@@ -16,7 +15,6 @@ if (formElement) {
 
 window.addEventListener('storage', function(event) {
     localStorage.setItem(event.key, event.newValue);
-    console.log(event.key, event.newValue);
     updatePage2(event.newValue);
 });
 
