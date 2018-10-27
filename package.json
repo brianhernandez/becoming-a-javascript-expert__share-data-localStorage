@@ -1,0 +1,29 @@
+{
+  "name": "becoming-a-javascript-expert__share-data-localstorage",
+  "version": "1.0.0",
+  "description": "Becoming A JavaScript Expert Course, Chapter 8 Frontend Datastore: Cookies, LocalStorage, and More, Exercise 3-4",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianhernandez/becoming-a-javascript-expert__share-data-localStorage.git"
+  },
+  "keywords": [
+    "localStorage"
+  ],
+  "author": "Brian Hernandez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brianhernandez/becoming-a-javascript-expert__share-data-localStorage/issues"
+  },
+  "homepage": "https://github.com/brianhernandez/becoming-a-javascript-expert__share-data-localStorage#readme",
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-autoprefixer": "^3.0.4",
+    "grunt-contrib-connect": "^2.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "^1.1.0"
+  }
+}
