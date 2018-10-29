@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Becoming A JavaScript Expert Course, Chapter 8 Frontend Datastore: Cookies, LocalStorage, and More, Exercise 3-5</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    ul {
+      list-style-type: none;
+    }
+    #friendList > li {
+      display: inline-block;
+    }
+    .deleteButton {
+      background-color: tomato;
+    }
+    .editButton {
+      background-color: cornflowerblue;
+    }
+    .editButton.saveState {
+      background-color: palegreen;
+    }
+    button {
+      padding: 5px;
+      border: none;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="heading">Becoming A JavaScript Expert Course, Chapter 8 Frontend Datastore: Cookies, LocalStorage, and More, Exercise 3-5</h1>
+  <ul id="friendList"></ul>
+  <script>
+    (function () {
+      'use strict';
+
+      if ('indexedDB' in window) {
+        var openRequest = window.indexedDB.open('DB', 1);
+
+        openRequest.onupgradeneeded = function(event) {
+          var db = event.target.result,
+              objectStore = db.createObjectStore('friends', { autoIncrement: true, keyPath: 'key' });
+
+          objectStore.transaction.oncomplete = function(event) {
+            var transaction = db.transaction('friends', 'readwrite'),
+                objectStoreRef = transaction.objectStore('friends'),
+                friends = [
+                  {
+                    name: 'Jimmy',
+                    email: 'jimmy@domain.com',
+                    phone: 234564
+                  },
+                  {
+                    name: 'Sally',
+                    email: 'sally@domain.com',
+                    phone: 294721
+                  },
+                  {
+                    name: 'Danny',
+                    email: 'danny@domain.com',
+                    phone: 900635
+                  },
+                  {
+                    name: 'Suzie',
+                    email: 'suzie@domain.com',
+                    phone: 113890
+                  },
+                  {
+                    name: 'Tommy',
+                    email: 'tommy@domain.com',
+                    phone: 334227
+                  }
+                ];
+            friends.forEach(function(friend) {
+              objectStoreRef.add(friend);
+            });
+          }
+
+          openRequest.onsuccess = function(event) {
+            var db = event.target.result,
+                transaction = db.transaction('friends', 'readonly'),
+                objectStore = transaction.objectStore('friends'),
+                getRequest = objectStore.getAll();
+
+            getRequest.onsuccess = function(event) {
+              let dbArray = event.target.result;
+              for (let i = 0; i < dbArray.length; i++) {
+                let friendLiEl = document.createElement('li');
+                let friendDivEl = document.createElement('div');
+
+                friendLiEl.setAttribute('id', 'k'+dbArray[i].key);
+                friendDivEl.innerHTML = '<ul><li class="name">'+dbArray[i].name+'</li><li class="email">'+dbArray[i].email+'</li><li class="phone">'+dbArray[i].phone+'</li><li><button class="editButton">Edit Friend</button></li><li><button class="deleteButton">Delete Friend</button>';
+                friendLiEl.appendChild(friendDivEl);
+                document.querySelector('#friendList').appendChild(friendLiEl);
+              }
+
+            document.querySelectorAll('.deleteButton').forEach(function(element) {
+              element.addEventListener('click', function(event) {
+                let friendKey = parseInt(this.parentNode.parentNode.parentNode.parentNode.id.slice(1));
+                var deleteRequest = db.transaction('friends', 'readwrite').objectStore('friends').delete(friendKey);
+
+                deleteRequest.onsuccess = function(event) {
+                  document.querySelector('#k'+friendKey).remove();
+                }
+              });
+            });
+
+            document.querySelectorAll('.editButton').forEach(function(element) {
+              element.addEventListener('click', function(event) {
+                let phoneLiEl = this.parentNode.previousSibling,
+                    emailLiEl = phoneLiEl.previousSibling,
+                    nameLiEl = emailLiEl.previousSibling,
+                    editButton = this,
+                    friendKey = parseInt(this.parentNode.parentNode.parentNode.parentNode.id.slice(1));
+
+                if (!this.classList.contains('saveState')) {
+                  nameLiEl.innerHTML = '<input type="text" placeholder="'+nameLiEl.innerHTML+'"></input>';
+                  emailLiEl.innerHTML = '<input type="text" placeholder="'+emailLiEl.innerHTML+'"></input>';
+                  phoneLiEl.innerHTML = '<input type="text" placeholder="'+phoneLiEl.innerHTML+'"></input>';
+                  editButton.innerHTML = 'Save';
+                  this.classList.add('saveState');
+                } else {
+                  let newName = nameLiEl.childNodes[0].value,
+                      newEmail = emailLiEl.childNodes[0].value,
+                      newPhone = phoneLiEl.childNodes[0].value,
+                      updateRequest = db.transaction('friends', 'readwrite').objectStore('friends').put({ name: newName, email: newEmail, phone: newPhone, key: friendKey });
+
+                  this.classList.remove('saveState');
+                  this.innerHTML = 'Edit Friend';
+
+                  updateRequest.onsuccess = function(event) {
+                    nameLiEl.innerHTML = newName;
+                    emailLiEl.innerHTML = newEmail;
+                    phoneLiEl.innerHTML = newPhone;
+                  }
+                }
+              });
+            });
+            }
+          }
+        };
+      }
+    }());
+  </script>
+</body>
+</html>
